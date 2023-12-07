@@ -187,61 +187,62 @@ public class Review {
 
     /**
      * Activity 2 starRating method
-     * Write the starRating method here which returns the number of 
+     * Write the starRating method here which returns the number of
      * stars for thereview based on its totalSentiment.
      */
     public static int starRating(String filename) {
         // call the totalSentiment method with the fileName
         double sentimentTotal = totalSentiment(filename);
-        // determine number of stars between 0 and 4 based on 
+        // determine number of stars between 0 and 4 based on
         // totalSentiment value
         int stars = 0; // change this!
         // write if statements here
-         if(sentimentTotal < -10)
-         {
-             stars = 0;
-         }
-         else if(sentimentTotal < 0)
-         {
+        if (sentimentTotal < -10) {
+            stars = 0;
+        } else if (sentimentTotal < 0) {
             stars = 1;
-         }
-         else if(sentimentTotal < 10)
-         {
+        } else if (sentimentTotal < 10) {
             stars = 2;
-         }
-         else if(sentimentTotal < 20)
-         {
+        } else if (sentimentTotal < 20) {
             stars = 3;
-         }
-         else
-         {
+        } else {
             stars = 4;
-         } 
-        
+        }
+
         // return number of stars
         return stars;
     }
-    //This method generates a fake review with a random adjective.
-    public static String fakeReview(String fileName)
-    {
-      String text = textToString(fileName);
-      for(int i = 0; i < text.length(); i++)
-      {
-        if(text.charAt(i) == '*')
-        {
-          int j = i;
-          while(true)
-          {
-        i++;
-          if(text.charAt(i) == ' ')
-          {
-            break;
-           }
-         }
-         int k = i;
-         text = text.substring(0, j) + randomAdjective() + text.substring(k);
-         }
-       }
-       return text;
+
+    // This method generates a fake review with a random adjective.
+    public static String fakeReview(String fileName) {
+        String review = textToString(fileName);
+        String fake = "";
+
+        for (int i = 0; i < review.length() - 1; i++) {
+            if (review.substring(i, i + 1).equals("*")) {
+                i++;
+                String replace = "";
+                boolean isWord = true;
+                while (isWord) {
+                    replace += review.substring(i, i + 1);
+                    i++;
+                    if (review.substring(i, i + 1).equals(" ")) {
+                        isWord = false;
+                    }
+                }
+                replace = replace.replaceAll("\\p{Punct}", "");
+                if (sentimentVal(replace) > 0) {
+                    replace = randomPositiveAdj() + " ";
+                } else if (sentimentVal(replace) < 0) {
+                    replace = randomNegativeAdj() + " ";
+                } else {
+                    replace = randomAdjective() + " ";
+                }
+                fake += replace;
+            } else {
+                fake += review.substring(i, i + 1);
+            }
+        }
+        return fake;
     }
 }
