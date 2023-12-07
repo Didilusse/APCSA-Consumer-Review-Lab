@@ -161,27 +161,36 @@ public class Review {
      * Write the code to total up the sentimentVals of each word in a review.
      */
     public static double totalSentiment(String filename) {
-        // read in the file contents into a string using the textToString
-        // method with the filename
+        // Read in the file contents into a string using the
+
         String review = textToString(filename);
 
-        // set up a sentimentTotal variable
+        // Set up a sentimentTotal variable to store the cumulative sentiment value
         double sentimentTotal = 0;
+
+        // Initialize indices to traverse the review string
         int startIndex = 0;
         int spaceIndex = review.indexOf(" ");
 
+        // Loop through the words in the review
         while (spaceIndex != -1) {
+            // Extract the current word from the review string
             String word = review.substring(startIndex, spaceIndex);
+
+            // Remove punctuation from the word
             word = removePunctuation(word);
+
+            // Add the sentiment value of the word to the sentimentTotal
             sentimentTotal += sentimentVal(word);
-            startIndex = spaceIndex + 1; // Move the start index to the next character after the space
-            spaceIndex = review.indexOf(" ", startIndex); // Find the next space
+
+            // Move the start index to the next character after the space
+            startIndex = spaceIndex + 1;
+
+            // Find the next space in the review string
+            spaceIndex = review.indexOf(" ", startIndex);
         }
 
-        // find each word
-        // add in its sentimentVal
-        // set the file contents to start after this word
-
+        // Return the cumulative sentiment value of the entire review
         return sentimentTotal;
     }
 
@@ -191,12 +200,17 @@ public class Review {
      * stars for thereview based on its totalSentiment.
      */
     public static int starRating(String filename) {
-        // call the totalSentiment method with the fileName
-        double sentimentTotal = totalSentiment(filename);
-        // determine number of stars between 0 and 4 based on
-        // totalSentiment value
-        int stars = 0; // change this!
-        // write if statements here
+        // Call the totalSentiment method with the fileName to 
+        //get the cumulative sentiment value
+        do uble sentimentTotal = totalSentiment(filename);
+
+        // Initialize stars variable to store the rating
+        int stars = 0;
+
+        // Determine the number of stars between 0 and 4 
+        //based on the totalSentiment
+         
+
         if (sentimentTotal < -10) {
             stars = 0;
         } else if (sentimentTotal < 0) {
@@ -209,40 +223,65 @@ public class Review {
             stars = 4;
         }
 
-        // return number of stars
+        // Return the number of stars
         return stars;
     }
 
     // This method generates a fake review with a random adjective.
     public static String fakeReview(String fileName) {
+        // Convert the contents of the file to a string
         String review = textToString(fileName);
+
+        // Initialize an empty string to store the fake review
         String fake = "";
 
+        // Loop through each character in the review string
         for (int i = 0; i < review.length() - 1; i++) {
+            // Check if the current character is an asterisk (*)
             if (review.substring(i, i + 1).equals("*")) {
-                i++;
-                String replace = "";
+                i++; // Move to the next character after the asterisk
+
+                // Initialize an empty string to store the 
+                //adjective to be replaced
+                St ring replace = "";
                 boolean isWord = true;
+
+                // Loop to capture the entire adjective marked by asterisks
                 while (isWord) {
                     replace += review.substring(i, i + 1);
                     i++;
-                    if (review.substring(i, i + 1).equals(" ")) {
+
+                    // Check if the next character is a space, 
+                    //indicating the end of the adjective
+                    if  (review.substring(i, i + 1).equals(" ")) {
                         isWord = false;
                     }
                 }
+
+                // Remove punctuation from the captured adjective
                 replace = replace.replaceAll("\\p{Punct}", "");
-                if (sentimentVal(replace) > 0) {
+
+                // Check the sentiment value of the adjective and 
+                //replace it accordingly
+                if  (sentimentVal(replace) > 0) {
                     replace = randomPositiveAdj() + " ";
                 } else if (sentimentVal(replace) < 0) {
                     replace = randomNegativeAdj() + " ";
                 } else {
                     replace = randomAdjective() + " ";
                 }
+
+                // Append the replaced adjective to the fake review
                 fake += replace;
             } else {
-                fake += review.substring(i, i + 1);
+                // If the current character is not an asterisk, 
+                //append it to the fake review
+                fa ke += review.substring(i, i + 1);
             }
         }
+
+        // Return the generated fake review
         return fake;
     }
+
 }
